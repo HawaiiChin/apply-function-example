@@ -1,0 +1,40 @@
+Class BioSequenceAnalyzer:
+  def __init__(self):
+    self.sequences={}
+    self.analysis_results={}
+    self.sequence_types={}
+
+  def load_fasta_file(self, filepath: str, auto_detect:bool= True)->Dict[str, str]:
+    sequences={}
+    current_id = None
+    current_seq = []
+
+  with open(filepath, 'r') as file:
+    content = file.read()
+  lines=content.split('\n')
+
+  for line in lines:
+    line = line.strip()
+    if line.startswith('>'):
+      if current_id:
+        seq_str = "".join(current_seq)
+        sequences[current_id]=seq_str
+        if auto_detect:
+          seq_type=self.auto_detect_sequence_type(seq_str)
+          self.sequence_types[current_id] = seq_type
+      current_id = line[1:].split()[0]
+      current_seq = []
+    elif line:
+      current_seq.append(line.upper())
+
+  if current_id:
+    seq_str = "".join(current_seq)
+    sequences[current_id]=seq_str
+
+    if auto_detect:
+      seq_type = self.auto_detect_sequence_type(seq_str)
+      self.sequence_types[current_id] = seq_type
+
+  self.sequences = sequences
+  return sequences
+
