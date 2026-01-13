@@ -15,6 +15,4 @@ foo <- function(x){
 }
 predictions <- apply(train[,-5],2,foo)
 sapply(predictions,max)	
-...
 
-I can collaborate here! Cheers, Melanie 
